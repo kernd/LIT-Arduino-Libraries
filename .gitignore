@@ -1,0 +1,12 @@
+EEPROM/*
+Ethernet/*
+FFT/*
+Firmata/*
+LiquidCrystal/*
+PinChangeInt/*
+SD/*
+Servo/*
+SoftwareSerial/*
+SPI/*
+Stepper/*
+Wire/*
