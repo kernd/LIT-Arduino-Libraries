@@ -48,15 +48,30 @@ public:
     void    swap(int &var1,int &var2);
     void    allOff();
     void    update();
-    void    drawPixel(int r,int c,uint32_t color);
-    void    drawXLine(int r,int c1,int c2,int color);
-    void    drawYLine(int c,int r1,int r2,int color);
-    void    drawRectangle(bool fill,int r1,int c1,int r2,int c2,int color);
+    void    drawPixel(int r,int c,long color);
+    void    drawXLine(int r,int c1,int c2,long color);
+    void    drawYLine(int c,int r1,int r2,long color);
+    void    drawRectangle(bool fill,int r1,int c1,int r2,int c2,long color);
     void    testEverything();
     void    splashSquares();
     void    splashSquares2();
     void    bassPulse();
     void    equalizer();
+    void    pulse(int channel,int row1,int col1,int maxSize);
+    void    squarePulses();
+    
+    //specific shapes of interest
+    void    smiley1(long color);
+    void    rightEyeOpen(long color);
+    void    leftEyeOpen(long color); 
+    void    leftWink(long color); 
+    void    rightWink(long color); 
+    void    oFace(long color);
+    
+    //function that changes smiley faces bases on frequency components
+    void    faceFreq();
+    
+   
 };
 
 

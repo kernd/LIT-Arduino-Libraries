@@ -1,8 +1,27 @@
-
-
 #include <iostream>
 
 #include "Grid.h"
+
+// get rid of this shit if it doesn't work? or figure out a function which can
+// initialize it all instead?
+
+int smiley1xmap[] = {3,4,5,14,15,16,3,4,5,6,13,14,15,16,4,5,6,7,12,13,14,15,5,6,7,8,11,12,13,14,6,7,8,9,10,11,12,13,7,8,9,10,11,12};
+int smiley1ymap[] = {11,11,11,11,11,11,12,12,12,12,12,12,12,12,13,13,13,13,13,13,13,13,14,14,14,14,14,14,14,14,15,15,15,15,15,15,15,15,16,16,16,16,16,16};
+
+int leftEyeOpenXmap[] = {5,4,5,6,3,4,5,6,7,4,5,6,5};
+int leftEyeOpenYmap[] = {2,3,3,3,4,4,4,4,4,5,5,5,6};
+
+int rightEyeOpenXmap[] = {14,13,14,15,12,13,14,15,16,13,14,15,14};
+int rightEyeOpenYmap[] = {2,3,3,3,4,4,4,4,4,5,5,5,6};
+
+int leftWinkXmap[] = {7,3,4,5,6,7};
+int leftWinkYmap[] = {3,4,4,4,4,4};
+
+int rightWinkXmap[] = {12,12,13,14,15,16};
+int rightWinkYmap[] = {3,4,4,4,4,4};
+
+int oFaceXmap[] = {4, 15,7,8,9,10,11,12,6,7,8,9,10,11,12,13,5,6,7,8,11,12,13,14,4,5,6,7,12,13,14,15,3,4,5,6,13,14,15,16,3,4,5,14,15,16,3,4,5,14,15,16,3,4,5,6,13,14,15,16,4,5,6,7,12,13,14,15,5,6,7,8,11,12,13,14,6,7,8,9,10,11,12,13,7,8,9,10,11,12};
+int oFaceYmap[] = {2,2,5,5,5,5,5,5,6,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,10,10,10,10,10,10,11,11,11,11,11,11,12,12,12,12,12,12,12,12,13,13,13,13,13,13,13,13,14,14,14,14,14,14,14,14,15,15,15,15,15,15,15,15,16,16,16,16,16,16};
 
 // constructor
 Grid :: Grid(int rows, int cols)
@@ -44,12 +63,12 @@ void Grid :: allOff()
     }
 }
 
-void Grid :: drawPixel(int r,int c,uint32_t color)
+void Grid :: drawPixel(int r,int c,long color)
 {
     strip->setPixelColor(address(r,c),color);
 }
 
-void Grid :: drawXLine(int r,int c1,int c2,int color)
+void Grid :: drawXLine(int r,int c1,int c2,long color)
 {
     swap(c1,c2);
     
@@ -59,7 +78,7 @@ void Grid :: drawXLine(int r,int c1,int c2,int color)
     }
 }
 
-void Grid :: drawYLine(int c,int r1,int r2,int color)
+void Grid :: drawYLine(int c,int r1,int r2,long color)
 {
     swap(r1,r2);
     
@@ -69,7 +88,7 @@ void Grid :: drawYLine(int c,int r1,int r2,int color)
     }
 }
 
-void Grid :: drawRectangle(bool fill,int r1,int c1,int r2,int c2,int color)
+void Grid :: drawRectangle(bool fill,int r1,int c1,int r2,int c2,long color)
 {
     swap(r1,r2);
     swap(c1,c2);
@@ -120,7 +139,7 @@ void Grid :: splashSquares()
 {
     int splashArray[7][5];
     int *spectrum;
-    int colorArray[] = {red,yellow,green,cyan,blue,magenta,white};
+    long colorArray[] = {red,yellow,green,cyan,blue,magenta,white};
     bool growing=0;
     int timeDelay = 20;
     
@@ -281,7 +300,7 @@ void Grid :: splashSquares2()
         }
     }
 }
-
+/*
 void Grid :: bassPulse()
 {
     allOff();
@@ -293,6 +312,48 @@ void Grid :: bassPulse()
         drawRectangle(0,9-n,9-n,10+n,10+n,cyan);
     }
     update();
+}
+*/
+void Grid :: pulse(int channel,int row1,int col1,int maxSize)
+{
+    //int timeDelay = 30;     // get this out of function
+    long colorArray[] = {red,yellow,green,cyan,blue,magenta,white};
+    
+    //allOff();
+    int *spectrum = freqChip->sample();
+    
+    
+    for (int n=0;n<spectrum[channel]*maxSize/2046;n++)
+    {
+        drawRectangle(0,row1-n,col1-n,row1+1+n,col1+1+n,colorArray[channel]);
+    }
+    //update();
+    //delay(timeDelay);
+}
+
+void Grid :: squarePulses()
+{
+    allOff();
+    /*
+    for (int n=1;n<6;n++)
+    {
+        int a1=rand()%18+1;
+        int a2=rand()%18+1;
+        int a3;
+        if (a1 < a2) a3 = 2*(18-a1);
+        else a3 = 2*(18-a2);
+        pulse(n,a1,a2,a3);
+    }
+    */
+    pulse(5,3,15,6);
+    pulse(4,4,4,8);
+    pulse(3,14,5,10);
+    pulse(2,15,15,8);
+    pulse(1,9,9,12);
+    
+    update();
+    delay(30);
+    
 }
 
 void Grid :: equalizer()
@@ -313,8 +374,63 @@ void Grid :: equalizer()
         delay(timeDelay);
         allOff();
     }
-     
+    
 }
+
+void Grid :: smiley1(long color)
+{
+    for(int i=0; i < 44; i++)
+    {
+        drawPixel(smiley1ymap[i], smiley1xmap[i], color);
+    }
+}
+
+void Grid :: rightEyeOpen(long color)
+{
+    for(int i=0; i < 13; i++)
+    {
+        drawPixel(rightEyeOpenYmap[i], rightEyeOpenXmap[i], color);
+    }
+}
+
+void Grid :: leftEyeOpen(long color)
+{
+    for(int i=0; i < 13; i++)
+    {
+        drawPixel(leftEyeOpenYmap[i], leftEyeOpenXmap[i], color);
+    }
+}
+
+void Grid :: rightWink(long color)
+{
+    for(int i=0; i < 6; i++)
+    {
+        drawPixel(rightWinkYmap[i], rightWinkXmap[i], color);
+    }
+}
+
+void Grid :: leftWink(long color)
+{
+    for(int i=0; i < 6; i++)
+    {
+        drawPixel(leftWinkYmap[i], leftWinkXmap[i], color);
+    }
+}
+
+void Grid :: oFace(long color)
+{
+    for(int i=0; i < 90; i++)
+    {
+        drawPixel(oFaceYmap[i], oFaceXmap[i], color);
+    }
+}
+
+void Grid :: faceFreq()
+{
+    
+}
+
+
 
 
 
