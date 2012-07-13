@@ -30,7 +30,7 @@ cols(cols),
 num(rows*cols)
 
 {
-    strip       = new LPD8806(num,dataPin,clockPin);
+    strip       = new ;
     freqChip    = new FFT(fftAnalogPin,fftStrobePin,fftResetPin);
 }
 
